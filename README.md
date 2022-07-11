@@ -36,6 +36,7 @@
 * `UPLOADS_ID` - ID of your Uploads Channel
 > Uploads Channel : The Channel Where All The Animes Files Will Be Uploaded 
 * `STATUS_ID` - ID of the message in your Uploads Channel where the status of bot will be showed
+* `SCHEDULE_ID` - ID of the message in your Uploads Channel where the Live Schedule From Subsplease will be showed
 * `CHANNEL_TITLE` - Name of your channel (This will appear in thumbnail of videos)
 * `INDEX_USERNAME` - Username of your Index Channel
 * `UPLOADS_USERNAME` - Username of your Uploads Channel
@@ -51,7 +52,7 @@
 <hr>
 
 ### 📤 Deploy
-<p><a href="https://heroku.com/deploy?template=https://github.com/TechShreyash/AutoAnimeBot"><img src="https://img.shields.io/badge/Deploy%20To%20Heroku-blueviolet?style=for-the-badge&logo=heroku" width="200""/></a></p>
+<p><a href="https://heroku.com/deploy?template=https://github.com/TechShreyash/AutoAnimeBot/tree/heroku"><img src="https://img.shields.io/badge/Deploy%20To%20Heroku-blueviolet?style=for-the-badge&logo=heroku" width="200"/></a></p>
 
 <hr>
 

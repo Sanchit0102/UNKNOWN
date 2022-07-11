@@ -1,4 +1,5 @@
 import asyncio
+import sys
 from main.modules.compressor import compress_video
 from main.modules.utils import episode_linker, get_duration, get_epnum, status_text
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, CallbackQuery
@@ -11,35 +12,37 @@ from config import INDEX_USERNAME, UPLOADS_USERNAME, UPLOADS_ID, INDEX_ID
 from main import app, queue, status
 from pyrogram.errors import FloodWait
 from pyrogram import filters
+from main.inline import button1
 
 status: Message
+
 async def tg_handler():
     while True:
         try:
             if len(queue) != 0:
-                i = queue[0]                
+                i = queue[0]  
                 queue.remove(i)
                 val, id, name, ep_num, video = await start_uploading(i)
-                
+
                 await del_anime(i["title"])
                 await save_uploads(i["title"])
-                if val != "err":
-                    await status.edit(await status_text(f"Adding Links To Index Channel ({INDEX_USERNAME})..."))
-                    await channel_handler(val,id,name,ep_num, video)
-                await status.edit(await status_text("Sleeping For 5 Minutes..."))
+                await status.edit(await status_text(f"Adding Links To Index Channel ({INDEX_USERNAME})..."),reply_markup=button1)
+                await channel_handler(val,id,name,ep_num, video)
+
+                await status.edit(await status_text("Sleeping For 5 Minutes..."),reply_markup=button1)
                 await asyncio.sleep(300)
             else:                
                 if "Idle..." in status.text:
                     try:
-                        await status.edit(await status_text("Idle..."))
+                        await status.edit(await status_text("Idle..."),reply_markup=button1)
                     except:
                         pass
-                await asyncio.sleep(1800)
+                await asyncio.sleep(600)
                 
         except FloodWait as e:
             flood_time = int(e.x) + 5
             try:
-                await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"))
+                await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"),reply_markup=button1)
             except:
                 pass
             await asyncio.sleep(flood_time)
@@ -61,12 +64,12 @@ async def start_uploading(data):
         msg = await app.send_photo(UPLOADS_ID,photo=img,caption=title)
 
         print("Downloading --> ",name)
-        await status.edit(await status_text(f"Downloading {name}"))
+        await status.edit(await status_text(f"Downloading {name}"),reply_markup=button1)
         file = await downloader(msg,link,size,title)
         await msg.edit(f"Download Complete : {name}")
 
         print("Encoding --> ",name)
-        await status.edit(await status_text(f"Encoding {name}"))
+        await status.edit(await status_text(f"Encoding {name}"),reply_markup=button1)
         duration = get_duration(file)
         os.rename(file,"video.mkv")
         compressed = await compress_video(duration,msg,name)
@@ -78,7 +81,7 @@ async def start_uploading(data):
             os.rename("out.mkv",fpath)
 
         print("Uploading --> ",name)
-        await status.edit(await status_text(f"Uploading {name}"))
+        await status.edit(await status_text(f"Uploading {name}"),reply_markup=button1)
         message_id = int(msg.message_id) + 1
         video = await upload_video(msg,fpath,id,tit,name,size)   
 
@@ -92,12 +95,10 @@ async def start_uploading(data):
     except FloodWait as e:
         flood_time = int(e.x) + 5
         try:
-            await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"))
+            await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"),reply_markup=button1)
         except:
             pass
         await asyncio.sleep(flood_time)
-    except Exception as e:
-        print(e)
     return message_id, id, tit, name, video
 
 VOTE_MARKUP = InlineKeyboardMarkup(
@@ -161,7 +162,7 @@ async def channel_handler(msg_id,id,name,ep_num,video):
     except FloodWait as e:
         flood_time = int(e.x) + 5
         try:
-            await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"))
+            await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"),reply_markup=button1)
         except:
             pass
         await asyncio.sleep(flood_time)
@@ -225,7 +226,7 @@ async def votes_(_,query: CallbackQuery):
     except FloodWait as e:
         flood_time = int(e.x) + 5
         try:
-            await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"))
+            await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"),reply_markup=button1)
         except:
             pass
         await asyncio.sleep(flood_time)

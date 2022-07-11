@@ -11,6 +11,7 @@ import os
 import time
 from main import app, status
 from pyrogram.errors import FloodWait
+from main.inline import button1
 
 async def upload_video(msg: Message,file,id,tit,name,ttl):
     try:
@@ -22,7 +23,7 @@ async def upload_video(msg: Message,file,id,tit,name,ttl):
             duration = get_duration(file)
             size = get_filesize(file)
             ep_num = get_epnum(name)
-            thumbnail,w,h = generate_thumbnail(id,file,tit,ep_num,size,format_time(duration))
+            thumbnail,w,h = await generate_thumbnail(id,file,tit,ep_num,size,format_time(duration))
             tags = tags_generator(tit)
             buttons = InlineKeyboardMarkup([
                 [
@@ -58,7 +59,7 @@ async def upload_video(msg: Message,file,id,tit,name,ttl):
     except FloodWait as e:
         flood_time = int(e.x) + 5
         try:
-            await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"))
+            await status.edit(await status_text(f"Floodwait... Sleeping For {flood_time} Seconds"),reply_markup=button1)
         except:
             pass
         await asyncio.sleep(flood_time)

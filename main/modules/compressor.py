@@ -6,39 +6,7 @@ import math
 import subprocess
 
 async def gg():
-  video = "video.mkv"
-  out = "out.mkv" 
-  prog = "progressaa.txt"
-  cmd = [
-    "ffmpeg",
-    "-hide_banner",
-    "-loglevel",
-    "quiet",
-    "-progress",
-    prog,
-    "-i",
-    video,
-    "-preset", 
-    "fast",
-    "-c:v", 
-    "libx265",
-    "-crf",
-    "27",
-    "-map",
-    "0:v",
-    "-c:a",
-    "aac",
-    "-map",
-    "0:a",
-    "-c:s",
-    "copy",
-    "-map",
-    "0:s?",
-    out,
-    "-y"      
-  ]
-  cmd = 'ffmpeg -hide_banner -loglevel quiet -progress "progressaa.txt" -i "video.mkv" -preset fast -c:v libx265 -crf 27 -map 0:v -c:a aac -map 0:a -c:s copy -map 0:s? "out.mkv" -y'
-  
+  cmd = 'ffmpeg -hide_banner -loglevel quiet -progress "progressaa.txt" -i "video.mkv" -preset fast -c:v libx265 -crf 27 -map 0:v -c:a aac -map 0:a -c:s copy -map 0:s? "out.mkv" -y'  
   subprocess.Popen(cmd,shell=True)
 
 
@@ -84,11 +52,11 @@ async def compress_video(total_time, message, name):
           await message.edit(progress_str)
         except:
             pass
-      await asyncio.sleep(10)
+      await asyncio.sleep(20)
 
     if os.path.lexists(out):
         return out
     else:
         return "None"
   except Exception as e:
-    print(e)
+    print("Encoder Error",e)
