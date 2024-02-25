@@ -1,1 +1,1 @@
-python3 -m main
+worker: bash pkg.sh && bash run.sh bot
